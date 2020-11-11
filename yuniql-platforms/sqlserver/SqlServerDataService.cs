@@ -36,6 +36,16 @@ namespace Yuniql.SqlServer
             return new SqlConnection(masterConnectionStringBuilder.ConnectionString);
         }
 
+        /// <summary>
+        /// Creates empty Db parameters.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public IDbParameters CreateDbParameters()
+        {
+            throw new NotImplementedException("This platform doesn't support Db parameters yet");
+        }
+
         public ConnectionInfo GetConnectionInfo()
         {
             var connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
@@ -99,5 +109,33 @@ namespace Yuniql.SqlServer
 
         public string GetSqlForInsertVersion()
             => @"INSERT INTO [${YUNIQL_SCHEMA_NAME}].[${YUNIQL_TABLE_NAME}] (Version, AppliedByTool, AppliedByToolVersion) VALUES ('{0}','{1}','{2}');";
+
+        /// <summary>
+        /// Updates the database migration tracking table.
+        /// </summary>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="traceService">The trace service.</param>
+        /// <returns>
+        /// True if target database was updated, otherwise returns false
+        /// </returns>
+        public bool UpdateDatabaseConfiguration(IDbConnection dbConnection, ITraceService traceService = null)
+        {
+            //no need to update tracking table as the structure has no been changed so far
+            return false;
+        }
+
+        /// <summary>
+        /// Try parses error from database specific exception.
+        /// </summary>
+        /// <param name="exc">The exc.</param>
+        /// <param name="result">The parsed error.</param>
+        /// <returns>
+        /// True, if the parsing was sucessfull otherwise false
+        /// </returns>
+        public bool TryParseErrorFromException(Exception exc, out string result)
+        {
+            result = null;
+            return false;
+        }
     }
 }
